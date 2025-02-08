@@ -1,14 +1,14 @@
 unit HeifImage;
 
-{$mode delphi}
+{$IFDEF FPC}{$MODE DELPHI}{$ENDIF}
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // Description:	Reader and writer for AVIF and HEIC images                    //
-// Version:	0.5                                                           //
-// Date:	06-FEB-2025                                                   //
+// Version:	0.5.1                                                         //
+// Date:	08-FEB-2025                                                   //
 // License:     MIT                                                           //
-// Target:	Win64, Free Pascal                                            //
+// Target:	Win64, Free Pascal, Delphi                                    //
 // Copyright:	(c) 2025 Xelitan.com.                                         //
 //		All rights reserved.                                          //
 //                                                                            //
@@ -19,6 +19,8 @@ interface
 uses Classes, Graphics, SysUtils, Math, Types, Dialogs;
 
 const LIBHEIF = 'libheif.dll';
+
+{$IFNDEF FPC}type PtrUInt = UIntPtr;{$ENDIF}
 
 type
   THeifCompression = (
