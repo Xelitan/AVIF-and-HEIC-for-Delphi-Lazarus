@@ -339,7 +339,7 @@ end;
 
 procedure THeicImage.Draw(ACanvas: TCanvas; const Rect: TRect);
 begin
-  ACanvas.StretchDraw(Rect, Self);
+  ACanvas.StretchDraw(Rect, FBmp);
 end;
 
 function THeicImage.GetHeight: Integer;
