@@ -33,3 +33,10 @@ Requires .DLL files (included). For Linux and MacOS you need to download binarie
 
 Should work under other 64 bit Delphis.
 Needs tests under 32 bit Lazarus and 32 bit Delphi.
+
+## This unit uses libheif.DLL
+
+The libheif is distributed under the terms of the GNU Lesser General Public License. 
+Copyright (c) 2017-2020 Struktur AG
+Copyright (c) 2017-2024 Dirk Farin
+Contact: Dirk Farin dirk.farin@gmail.com
