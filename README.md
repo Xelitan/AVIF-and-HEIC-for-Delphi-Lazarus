@@ -45,7 +45,7 @@ Contact: Dirk Farin dirk.farin@gmail.com
 
 1) apt install apt-file libheif-dev
 2) apt-file search libheif.so
-It will list you how your liblz4.so files are named *exactly* and where they are
+It will list you how your libheif.so files are named *exactly* and where they are
 3) Open HeifImage.pas and edit "const LIBHEIF"
 4) Change the value of that const. Enter filename (excluding path) found in step 2
 5) Compile and run
