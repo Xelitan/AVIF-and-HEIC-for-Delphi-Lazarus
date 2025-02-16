@@ -40,3 +40,12 @@ The libheif is distributed under the terms of the GNU Lesser General Public Lice
 Copyright (c) 2017-2020 Struktur AG
 Copyright (c) 2017-2024 Dirk Farin
 Contact: Dirk Farin dirk.farin@gmail.com
+
+## Linux (Debian, Ubuntu, Mint)
+
+1) apt install apt-file libheif-dev
+2) apt-file search libheif.so
+It will list you how your liblz4.so files are named *exactly* and where they are
+3) Open HeifImage.pas and edit "const LIBHEIF"
+4) Change the value of that const. Enter filename (excluding path) found in step 2
+5) Compile and run
