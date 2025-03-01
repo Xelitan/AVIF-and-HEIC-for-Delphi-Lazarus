@@ -5,8 +5,8 @@ unit HeifImage;
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // Description:	Reader and writer for AVIF and HEIC images                    //
-// Version:	0.5.1                                                         //
-// Date:	08-FEB-2025                                                   //
+// Version:	0.6                                                        //
+// Date:	01-MAR-2025                                                   //
 // License:     MIT                                                           //
 // Target:	Win64, Free Pascal, Delphi                                    //
 // Copyright:	(c) 2025 Xelitan.com.                                         //
@@ -202,6 +202,7 @@ type
     procedure SaveToStream(Stream: TStream); override;
     constructor Create; override;
     destructor Destroy; override;
+    function ToBitmap: TBitmap;
   end;
 
   { TAvifImage }
@@ -249,7 +250,7 @@ begin
       heif_context_get_primary_image_handle(Ctx, ImageHandle);
 
       try
-        Error := heif_decode_image(imageHandle, Image, Integer(heif_colorspace_RGB), Integer(heif_chroma_interleaved_RGB), nil);
+        Error := heif_decode_image(imageHandle, Image, Integer(heif_colorspace_RGB), Integer(heif_chroma_interleaved_RGBA), nil);
 
         if Error.code <> 0 then raise Exception.Create('Decoding error');
 
@@ -260,17 +261,17 @@ begin
 
         if DataStride < 1 then raise Exception.Create('Failed to get image plane');
 
-        Padding := DataStride - (AWidth*3);
+        Padding := DataStride - (AWidth*4);
         FBmp.SetSize(AWidth, AHeight);
 
         for y:=0 to FBmp.Height-1 do begin
           P := FBmp.Scanline[y];
 
           for x:=0 to FBmp.Width-1 do begin
-            P[4*x+3] := 0;
             P[4*x+2] := Data^; Inc(Data);
             P[4*x+1] := Data^; Inc(Data);
             P[4*x  ] := Data^; Inc(Data);
+            P[4*x+3] := Data^; Inc(Data); //alpha
           end;
           Inc(Data, Padding);
         end;
@@ -418,6 +419,11 @@ destructor THeicImage.Destroy;
 begin
   FBmp.Free;
   inherited Destroy;
+end;
+
+function THeicImage.ToBitmap: TBitmap;
+begin
+  Result := FBmp;
 end;
 
 { TAvifImage }
