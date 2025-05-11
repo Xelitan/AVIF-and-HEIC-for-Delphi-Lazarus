@@ -5,8 +5,8 @@ unit HeifImage;
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 // Description:	Reader and writer for AVIF and HEIC images                    //
-// Version:	0.7                                                        //
-// Date:	11-MAR-2025                                                   //
+// Version:	0.6                                                        //
+// Date:	01-MAR-2025                                                   //
 // License:     MIT                                                           //
 // Target:	Win64, Free Pascal, Delphi                                    //
 // Copyright:	(c) 2025 Xelitan.com.                                         //
@@ -175,7 +175,6 @@ type
   procedure heif_decoding_options_free(options: PHeifDecodingOptions); cdecl; external LIBHEIF;
   procedure heif_image_handle_release(handle: PHeifImageHandle); cdecl; external LIBHEIF;
   procedure heif_image_release(image: PHeifImage); cdecl; external LIBHEIF;
-  function heif_context_write_to_file(context: PHeifContext; filename: PAnsiChar): THeifError;  stdcall; external LIBHEIF;
 
   { THeicImage }
 type
@@ -185,7 +184,7 @@ type
     FBmp: TBitmap;
     FCompression: Integer;
     procedure DecodeFromStream(Str: TStream);
-    procedure EncodeToFile(Filename: String);
+    procedure EncodeToStream(Str: TStream);
   protected
     procedure Draw(ACanvas: TCanvas; const Rect: TRect); override;
   //    function GetEmpty: Boolean; virtual; abstract;
@@ -200,7 +199,7 @@ type
     procedure SetLosslessCompression;
     procedure Assign(Source: TPersistent); override;
     procedure LoadFromStream(Stream: TStream); override;
-    procedure SaveToFile(const Filename: String); override;
+    procedure SaveToStream(Stream: TStream); override;
     constructor Create; override;
     destructor Destroy; override;
     function ToBitmap: TBitmap;
@@ -285,7 +284,7 @@ begin
     end;
 end;
 
-procedure THeicImage.EncodeToFile(Filename: String);
+procedure THeicImage.EncodeToStream(Str: TStream);
 var Ctx: PHeifContext;
     Encoder: PHeifEncoder;
     Image: PHeifImage;
@@ -330,11 +329,10 @@ begin
       heif_encoder_release(Encoder);
     end;
 
-//    Writer.writer_api_version := 1;
-//    Writer.write := @WriterFun;
+    Writer.writer_api_version := 1;
+    Writer.write := @WriterFun;
 
-//    heif_context_write(Ctx, Writer, @Str);
-    heif_context_write_to_file(Ctx, PAnsiChar(Filename));
+    heif_context_write(Ctx, Writer, @Str);
   finally
     heif_context_free(Ctx);
   end;
@@ -401,9 +399,9 @@ begin
   DecodeFromStream(Stream);
 end;
 
-procedure THeicImage.SaveToFile(const Filename: String);
+procedure THeicImage.SaveToStream(Stream: TStream);
 begin
-  EncodeToFile(Filename);
+  EncodeToStream(Stream);
 end;
 
 constructor THeicImage.Create;
