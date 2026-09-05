@@ -278,6 +278,7 @@ begin
 
       finally
         heif_image_handle_release(ImageHandle);
+        heif_image_release(Image);
       end;
     finally
       heif_context_free(Ctx);
